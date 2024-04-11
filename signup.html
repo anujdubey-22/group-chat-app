@@ -3,18 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Group_Chat</title>
 </head>
 <body>
     <form onsubmit="handleSignup(event)">
     <label for="name">Name:</label>
     <input type="text" name="name" id="name">
     <label for="email">Email:</label>
-    <input type="text" name="email" id="email">
+    <input type="email" name="email" id="email">
+    <label for="phone">Phone number</label>
+    <input type="number" name="phone" id="phone">
     <label for="password">Password</label>
     <input type="password" name="password" id="password">
     <button type="submit">Submit</button>
     </form>
     <script src="main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </body>
 </html>
