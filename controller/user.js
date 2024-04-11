@@ -10,8 +10,9 @@ exports.postSignup = async (req, res, next) => {
 
     // check if email already exists or not if email exist then return the error.
     const existingUser = await User.findOne({ where: { email: email } });
-
+    console.log(existingUser,'existinguser')
     if (existingUser) {
+      console.log("hello");
       return res.status(409).json({ message: "Email already exists" });
     }
 
@@ -24,7 +25,8 @@ exports.postSignup = async (req, res, next) => {
           password: hash,
           phone: phone,
         });
-        res.status(201).json({msg:"User successfuly signup",data:user});
+        
+        res.status(201).json({ msg: "User successfuly signup", data: user });
       } else {
         console.log(err, "error in hashing");
         return res.status(404).send("Error in hashing");

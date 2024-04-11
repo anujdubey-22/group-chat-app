@@ -12,13 +12,14 @@ async function handleSignup(event) {
       password: password,
     });
     console.log(response);
-    if(response.data.status===201){
+    if(response.status===201){
+        alert("Successfuly signed up");
         console.log('user signup done')
     }
-    else{
-
-    }
   } catch (error) {
+    if (error.response.status===409){
+        alert("User already exists, Please Login");
+    }
     console.log(error,'error in user signup')
   }
 }
