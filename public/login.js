@@ -9,6 +9,7 @@ async function handleLogin(event) {
       password: password,
     });
     console.log(data, "data in login.js");
+    //localStorage.setItem('token':data.response.token);
 
   } 
   catch (error) {

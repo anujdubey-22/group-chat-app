@@ -3,6 +3,9 @@ const bodyParser = require("body-parser");
 const cors = require('cors');
 const sequelize = require('./database/database');
 const userRouter = require('./routes/user');
+const chatRouter = require('./routes/chat');
+const User = require('./models/user');
+const Message = require('./models/chat');
 
 const app = express();
 app.use(cors({
@@ -11,10 +14,14 @@ app.use(cors({
 app.use(bodyParser.json({extended:true}));
 
 app.use('/user',userRouter);
+app.use('/chat',chatRouter);
+
+User.hasMany(Message);
+Message.belongsTo(User);
 
 async function sync() {
     try {
-      const data = await sequelize.sync();
+      const data = await sequelize.sync({force:true});
       //console.log(data);
       app.listen(process.env.PORT || 3000 , () => {
         console.log("server started on Port 3000");
