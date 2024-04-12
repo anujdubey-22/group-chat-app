@@ -5,6 +5,7 @@ const verifyToken = require('../middleware/auth');
 const router = express.Router();
 
 router.post("/send", verifyToken , chatController.postSend);
+router.get('/allchat',verifyToken,chatController.getAllChats);
 
 
 

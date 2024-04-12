@@ -15,6 +15,7 @@ async function handleSignup(event) {
     if(response.status===201){
         alert("Successfuly signed up");
         console.log('user signup done')
+        window.location.href='./login.html'
     }
   } catch (error) {
     if (error.response.status===409){
