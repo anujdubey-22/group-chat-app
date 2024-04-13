@@ -18,9 +18,12 @@ exports.postSend = async (req,res,next) => {
 }
 
 exports.getAllChats= async (req,res,next) => {
+    const number = parseInt(req.query.number || 1);
     console.log('get chats in chat controller')
     const userId = req.user.userId;
-    const chats = await Message.findAll();
+    const chats = await Message.findAll({
+        offset: number // Skips the first two results
+    });
     console.log(chats,'chats in getAllChats');
     res.status(201).json({message:'all chats fetched',data:chats})
 }

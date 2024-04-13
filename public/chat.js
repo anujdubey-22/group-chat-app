@@ -1,12 +1,21 @@
 async function getChats() {
     try{
         const token = localStorage.getItem("token");
-        const chats = await axios.get("http://localhost:3000/chat/allchat", {
+        const message = localStorage.getItem('message');
+        const messageArray = JSON.parse(message);
+        const chats = await axios.get(`http://localhost:3000/chat/allchat/number=10`, {
           headers: { authorization: token }
         });
         console.log(chats,'chats');
-        for(let message of chats.data.data){
-            showChatToScreen(message.message)
+        if (messageArray){
+            for(let message of messageArray){
+                showChatToScreen(message);
+            }
+        }
+        if (chats){
+            for(let message of chats.data.data){
+                showChatToScreen(message.message)
+            }
         }
     }
     catch(error){
@@ -40,6 +49,10 @@ async function sendMessage() {
     );
     console.log(chat, "chat post method done");
     if (chat.status === 201) {
+        const messageArray = [];
+        messageArray.push(message);
+        const messageString = JSON.stringify(messageArray);
+        localStorage.setItem('message',messageString);
       console.log("chat successfully created in database");
       showChatToScreen(chat.data.data.message);
     }
