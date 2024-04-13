@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Group Chat</title>
+    <style>
+        .group-container {
+            width: 300px;
+            float: left;
+        }
+
+        .message-container {
+            width: 600px;
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="group-container">
+        <h2>My Groups</h2>
+        <ul id="group-list">
+            <!-- Dynamically populated with user's groups -->
+        </ul>
+        <input type="text" id="group-name" placeholder="Enter group name">
+        <button onclick="createGroup()">Create Group</button>
+    </div>
+    
+    <div class="message-container">
+        <h2>Group Chat</h2>
+        <ul id="message-list">
+            <!-- Dynamically populated with group messages -->
+        </ul>
+        <input type="text" id="message-input" placeholder="Enter message">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        // Code for creating a group
+        function createGroup() {
+            const groupName = document.getElementById('group-name').value;
+            // Call API to create a group with groupName
+        }
+
+        // Code for sending a message
+        function sendMessage() {
+            const message = document.getElementById('message-input').value;
+            // Call API to send message to the group
+        }
+    </script>
+</body>
+</html>

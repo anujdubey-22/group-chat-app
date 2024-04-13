@@ -6,6 +6,8 @@ const userRouter = require('./routes/user');
 const chatRouter = require('./routes/chat');
 const User = require('./models/user');
 const Message = require('./models/chat');
+const Group = require('./models/group');
+const { group } = require('console');
 
 const app = express();
 app.use(cors({
@@ -18,6 +20,12 @@ app.use('/chat',chatRouter);
 
 User.hasMany(Message);
 Message.belongsTo(User);
+
+User.hasMany(Group);
+Group.belongsTo(User);
+
+Group.hasMany(Message);
+Message.belongsTo(Group);
 
 async function sync() {
     try {

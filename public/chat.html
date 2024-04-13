@@ -8,6 +8,38 @@
 </head>
 <body>
 <div class="chat-container">
+    <div class="group-list">
+        <!-- Display the list of groups the user is part of -->
+        <div class="group">Group 1</div>
+        <div class="group">Group 2</div>
+        <!-- User can click on a group to switch to that group -->
+    </div>
+    <div class="chat-messages">
+        <div class="message"></div>
+    </div>
+    <input type="text" id="input_message" placeholder="Type your message">
+    <button onclick="sendMessage()">Send</button>
+    <button onclick="toggleTheme()">Change Theme</button>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="chat.js"></script>
+</body>
+</html>
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Group_Chat</title>
+<link rel="stylesheet" href="chat.css">
+</head>
+<body>
+<div class="chat-container">
     <div class="chat-messages">
         <div class="message"></div>
     </div>
@@ -19,4 +51,4 @@
 <script src="chat.js"></script>
 
 </body>
-</html>
+</html> -->

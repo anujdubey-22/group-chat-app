@@ -1,3 +1,5 @@
+const messageArray = [];
+
 async function getChats() {
     try{
         const token = localStorage.getItem("token");
@@ -49,10 +51,13 @@ async function sendMessage() {
     );
     console.log(chat, "chat post method done");
     if (chat.status === 201) {
-        const messageArray = [];
+        
         messageArray.push(message);
-        const messageString = JSON.stringify(messageArray);
-        localStorage.setItem('message',messageString);
+        if(messageArray.length<10){
+            const messageString = JSON.stringify(messageArray);
+            localStorage.setItem('message',messageString);    
+        }
+        
       console.log("chat successfully created in database");
       showChatToScreen(chat.data.data.message);
     }
