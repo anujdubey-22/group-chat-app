@@ -1,50 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Group Chat</title>
-    <style>
-        .group-container {
-            width: 300px;
-            float: left;
-        }
-
-        .message-container {
-            width: 600px;
-            float: right;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chat Theme</title>
+<link rel="stylesheet" href="group.css">
 </head>
 <body>
-    <div class="group-container">
-        <h2>My Groups</h2>
-        <ul id="group-list">
-            <!-- Dynamically populated with user's groups -->
+<div class="container">
+    <div class="left">
+        <h2>Create Group</h2>
+        <input type="text" placeholder="Enter group name">
+        <button>Create Group</button>
+        <h3>Group List</h3>
+        <ul>
+            <li>Group 1</li>
+            <li>Group 2</li>
+            <li>Group 3</li>
         </ul>
-        <input type="text" id="group-name" placeholder="Enter group name">
-        <button onclick="createGroup()">Create Group</button>
     </div>
-    
-    <div class="message-container">
-        <h2>Group Chat</h2>
-        <ul id="message-list">
-            <!-- Dynamically populated with group messages -->
-        </ul>
-        <input type="text" id="message-input" placeholder="Enter message">
-        <button onclick="sendMessage()">Send</button>
+    <div class="right">
+        <h2>Messages</h2>
+        <div class="messages">
+            <p>User 1: Hello</p>
+            <p>User 2: Hi</p>
+            <p>User 1: How are you?</p>
+            <p>User 2: I'm good, thanks</p>
+        </div>
+        <input type="text" placeholder="Type your message here">
+        <button>Send</button>
     </div>
-
-    <script>
-        // Code for creating a group
-        function createGroup() {
-            const groupName = document.getElementById('group-name').value;
-            // Call API to create a group with groupName
-        }
-
-        // Code for sending a message
-        function sendMessage() {
-            const message = document.getElementById('message-input').value;
-            // Call API to send message to the group
-        }
-    </script>
+</div>
 </body>
 </html>

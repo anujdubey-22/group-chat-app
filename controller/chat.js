@@ -22,7 +22,7 @@ exports.getAllChats= async (req,res,next) => {
     console.log('get chats in chat controller')
     const userId = req.user.userId;
     const chats = await Message.findAll({
-        offset: number // Skips the first two results
+        offset: number // Skips the first two results if number is 2
     });
     console.log(chats,'chats in getAllChats');
     res.status(201).json({message:'all chats fetched',data:chats})

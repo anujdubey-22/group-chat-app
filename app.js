@@ -7,7 +7,9 @@ const chatRouter = require('./routes/chat');
 const User = require('./models/user');
 const Message = require('./models/chat');
 const Group = require('./models/group');
-const { group } = require('console');
+const UserGroup = require('./models/usergroup');
+const grouprouter = require('./routes/group');
+const Admin = require('./models/admin');
 
 const app = express();
 app.use(cors({
@@ -17,12 +19,16 @@ app.use(bodyParser.json({extended:true}));
 
 app.use('/user',userRouter);
 app.use('/chat',chatRouter);
+app.use('/group',grouprouter);
 
 User.hasMany(Message);
 Message.belongsTo(User);
 
-User.hasMany(Group);
-Group.belongsTo(User);
+User.belongsToMany(Group, { through: UserGroup });
+Group.belongsToMany(User, { through: UserGroup });
+
+User.belongsToMany(Group, { through: Admin });
+Group.belongsToMany(User, { through: Admin });
 
 Group.hasMany(Message);
 Message.belongsTo(Group);
