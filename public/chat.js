@@ -58,6 +58,9 @@ async function sendMessage() {
     // to clear the input element
     document.getElementById("messageInput").value = "";
 
+    // Initialize socket.io
+    const socket = io.connect("http://localhost:3000");
+
     const token = localStorage.getItem("token");
     const chat = await axios.post(
       "http://localhost:3000/chat/send",
@@ -67,6 +70,10 @@ async function sendMessage() {
       { headers: { authorization: token } }
     );
     console.log(chat, "chat post method done");
+
+    // Send message to server using socket.io
+    socket.emit("sendMessage", message);
+
     if (chat.status === 201) {
       messageArray.push(message);
       if (messageArray.length < 10) {
@@ -96,8 +103,8 @@ async function sendMessage() {
 // }
 
 async function showGroup(groupRow) {
-  console.log(groupRow)
-  const {group,id} = groupRow
+  console.log(groupRow);
+  const { group, id } = groupRow;
   const groupList = document.getElementById("groupList");
 
   const button = document.createElement("button");
@@ -111,7 +118,7 @@ async function showGroup(groupRow) {
   button.addEventListener("click", function (e) {
     // Add your code here to perform the action you want when the button is clicked
     console.log("Button clicked!");
-    console.log(e)
+    console.log(e);
     const groupName = this.textContent;
     console.log("Group Name: ", groupName);
 
@@ -133,5 +140,5 @@ async function createGroup() {
     { headers: { authorization: token } }
   );
   console.log(group, "group created in database in chat.js");
-  showGroup(groupName);
+  showGroup(group.data.group);
 }
