@@ -19,13 +19,10 @@ async function getChatsAndGroups() {
     console.log(groups, "all groups fetched");
 
     /// now loop through group and find which task has groupid, and if that groupid belongs to admin or not if belongs to admin and userid matched it show it to screen
-//also add group while creating chat.
-    const chats = await axios.get(
-      `http://localhost:3000/chat/allchat`,
-      {
-        headers: { authorization: token },
-      }
-    );
+    //also add group while creating chat.
+    const chats = await axios.get(`http://localhost:3000/chat/allchat`, {
+      headers: { authorization: token },
+    });
     console.log(chats, "chats");
 
     if (groups) {
@@ -36,7 +33,7 @@ async function getChatsAndGroups() {
     }
     if (chats) {
       for (let message of chats.data.data) {
-        console.log(message.message)
+        console.log(message.message);
         showChatToScreen(message.message);
       }
     }
@@ -70,7 +67,7 @@ async function sendMessage() {
       "http://localhost:3000/chat/send",
       {
         message: message,
-        groupName:room
+        groupName: room,
       },
       { headers: { authorization: token } }
     );
@@ -171,8 +168,8 @@ async function showGroup(groupRow) {
   deleteGroup.addEventListener("click", async () => {
     try {
       const groupId = id;
-      const token = localStorage.getItem('token');
-      console.log(token,'token in deletingGroup')
+      const token = localStorage.getItem("token");
+      console.log(token, "token in deletingGroup");
       const deleteGroup = await axios.post(
         `http://localhost:3000/group/groupdelete`,
         {
@@ -184,7 +181,6 @@ async function showGroup(groupRow) {
       );
       console.log(deleteGroup, "deleteGroup in chat.js");
       location.reload();
-
     } catch (error) {
       console.log(error, "error in deleting group");
     }
@@ -223,12 +219,29 @@ async function createGroup() {
   showGroup(group.data.group);
 }
 
+async function download() {
+  try {
+    const token = localStorage.getItem("token");
+    console.log("download clicked", token);
+    const download = await axios.get(
+      "http://localhost:3000/chat/chatdownload",
+      {
+        headers: { authorization: token },
+      }
+    );
+    console.log(download, "download in downloading chat");
 
-async function download(){
-  const token = localStorage.getItem('token');
-  console.log('download clicked',token)
-  const download = await axios.get('http://localhost:3000/chat/chatdownload',{
-    headers: { authorization: token },
-  });
-  console.log(download,'download in downloading chat');
+    if (download.status === 201) {
+      //the bcakend is essentially sending a download link
+      //  which if we open in browser, the file would download
+      var a = document.createElement("a");
+      a.href = download.data.fileUrl;
+      a.download = "mychats.csv";
+      a.click();
+    } else {
+      throw new Error(download.data.message);
+    }
+  } catch (error) {
+    console.log(error, "error in download in chat js");
+  }
 }

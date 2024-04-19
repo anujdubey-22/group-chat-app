@@ -5,6 +5,37 @@ const UserGroup = require("../models/usergroup");
 const { Op } = require("sequelize");
 const Sequelize = require("sequelize");
 
+function uploadtoS3(data, filename) {
+    return new Promise((resolve, reject) => {
+      //console.log(process.env.IAM_USER_KEY,' process.env.IAM_USER_KEYyyyyy');
+      const BUCKET_NAME = process.env.BUCKET_NAME;
+      const IAM_USER_KEY = process.env.IAM_USER_KEY;
+      const IAM_USER_SECRET = process.env.IAM_USER_SECRET;
+  
+      let s3bucket = new AWS.S3({
+        accessKeyId: IAM_USER_KEY,
+        secretAccessKey: IAM_USER_SECRET,
+      });
+  
+      var params = {
+        Bucket: BUCKET_NAME,
+        Key: filename,
+        Body: data,
+        ACL: "public-read",
+      };
+      s3bucket.upload(params, (err, s3response) => {
+        if (err) {
+          console.log(err, "Something went wrong in s3 createbucket");
+          reject("Something went wrong in s3 createbucket");
+        } else {
+          console.log(s3response, "success in s3 createbucket");
+          console.log(s3response.Location, "urlllll");
+          resolve(s3response.Location);
+        }
+      });
+    });
+  }
+
 exports.postSend = async (req, res, next) => {
   let chat = null;
   try {
@@ -88,29 +119,39 @@ exports.getAllChats = async (req, res, next) => {
 };
 
 exports.postChatDownload = async (req, res, next) => {
-  console.log("in  download chats in chat controller");
-  const userId = req.user.userId;
-  const chats = await Message.findAll({
-    where: {
-      [Op.or]: [
-        { groupid: null }, // messages without a groupid
-        {
-          groupid: {
-            [Op.in]: Sequelize.literal(
-              `(SELECT groupid FROM UserGroups WHERE userid = ${userId})`
-            ),
-          },
-        }, // messages with groupid associated with userId in UserGroups
-      ],
-    },
-    include: [
-      {
-        model: Group,
+  try {
+    console.log("in  download chats in chat controller");
+    const userId = req.user.userId;
+    const chats = await Message.findAll({
+      where: {
+        [Op.or]: [
+          { groupid: null }, // messages without a groupid
+          {
+            groupid: {
+              [Op.in]: Sequelize.literal(
+                `(SELECT groupid FROM UserGroups WHERE userid = ${userId})`
+              ),
+            },
+          }, // messages with groupid associated with userId in UserGroups
+        ],
       },
-    ],
-  });
+      include: [
+        {
+          model: Group,
+        },
+      ],
+    });
 
-  console.log(chats, "chats  in chat controllerrrrr ");
-  const stringified = JSON.stringify(chats);
-  console.log(stringified,'stringifieddddddddddd');
+    console.log(chats, "chats  in chat controllerrrrr ");
+    const stringified = JSON.stringify(chats);
+    console.log(stringified, "stringifieddddddddddd");
+    const filename = `Chats${userId}/${new Date()}.txt`;
+    const fileUrl = await uploadtoS3(stringified, filename);
+    console.log(fileUrl, "fileUrl in getDownloaddd");
+    //console.log(new Date().toLocaleDateString())
+    res.status(201).json({ fileUrl, success: true });
+  } catch (error) {
+    console.log(error, "error in getDownload");
+    res.status(500).json({ success: false });
+  }
 };
