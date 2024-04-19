@@ -23,9 +23,23 @@ const io = socketIo(server, {
 
 
 io.on('connection', (socket) => {
-  socket.on('sendMessage', (msg) => {
-    console.log('message in socket: ' + msg);
+  socket.on('sendMessage', ({message,room}) => {
+    console.log('message in socket: ' + message);
+    socket.join(room);
+    //socket.to(room).emit('sendToAll',message);
+    if(room){
+      socket.to(room).emit('sendToAll',message);
+      console.log('only sent to room ',room);
+    }
+    else{
+      socket.broadcast.emit('sendToAll',message);
+      console.log('only sent to all broadcast');
+    }
   });
+  socket.on('join-room',(room) => {
+    socket.join(room);
+    console.log('joineddddddddd',room)
+  })
 });
 
 

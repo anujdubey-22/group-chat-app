@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const Group = require("../models/group");
 const Admin = require("../models/admin");
+const UserGroup = require('../models/usergroup');
 
 exports.postCreateGroup = async (req, res, next) => {
   try {
@@ -42,3 +43,40 @@ exports.getGroup = async (req, res, next) => {
     console.log(error, "error in getting groups");
   }
 };
+
+exports.deleteGroup = async(req,res,next)=> {
+    try{
+        const groupId = req.body.groupId;
+        console.log(
+          req.user,
+          groupId,
+          "groupId with userid in group controller"
+        );
+        const userId = req.user.userId;
+
+        //check for userid is admin or not
+
+        const checkUser = await Admin.findOne({ where: { groupId: groupId, userId: userId } });
+        if(checkUser){
+            const checkGroup = await Group.findByPk(groupId);
+            if(checkGroup){
+                const deleteGroup = await Group.destroy({where:{id:groupId}});
+                const deletUserGroup = await UserGroup.destroy({where : {groupId:groupId}});
+                const deleteAdmin = await Admin.destroy({where:{groupId:groupId}});
+                res.status(201).json({msg:'group deleted successfuly'});
+            }
+            else{
+                throw new Error('groupId provided does not exist');
+            }
+        }
+        else{
+            throw new Error('userId provided is notAdmin to perform delete task');
+        }
+
+
+    }
+    catch(error){
+        console.log(error,'error in deleting group in group controller');
+        res.status(400).json({msg:'error in deleting in group controller'});
+    }
+}
