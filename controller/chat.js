@@ -4,6 +4,7 @@ const Group = require("../models/group");
 const UserGroup = require("../models/usergroup");
 const { Op } = require("sequelize");
 const Sequelize = require("sequelize");
+const AWS = require("aws-sdk");
 
 function uploadtoS3(data, filename) {
     return new Promise((resolve, reject) => {
