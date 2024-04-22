@@ -2,6 +2,8 @@ const User = require("../models/user");
 const Group = require("../models/group");
 const Admin = require("../models/admin");
 const UserGroup = require('../models/usergroup');
+const Message = require("../models/chat");
+
 
 exports.postCreateGroup = async (req, res, next) => {
   try {
@@ -55,11 +57,12 @@ exports.deleteGroup = async(req,res,next)=> {
         const userId = req.user.userId;
 
         //check for userid is admin or not
-
         const checkUser = await Admin.findOne({ where: { groupId: groupId, userId: userId } });
         if(checkUser){
+          // if user is admin then check if given groupid exist in group table or not
             const checkGroup = await Group.findByPk(groupId);
             if(checkGroup){
+                const deleteMessage = await Message.destroy({where:{groupId:groupId}});
                 const deleteGroup = await Group.destroy({where:{id:groupId}});
                 const deletUserGroup = await UserGroup.destroy({where : {groupId:groupId}});
                 const deleteAdmin = await Admin.destroy({where:{groupId:groupId}});

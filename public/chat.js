@@ -56,13 +56,16 @@ async function showChatToScreen(message) {
 
 async function sendMessage() {
   try {
-    const message = document.getElementById("messageInput").value;
+    let message = document.getElementById("messageInput").value;
     const room = document.getElementById("roomInput").value;
 
     // to clear the input element
     document.getElementById("messageInput").value = "";
 
     const token = localStorage.getItem("token");
+    const username = localStorage.getItem('username');
+    message=username+': '+message;
+
     const chat = await axios.post(
       "http://localhost:3000/chat/send",
       {
