@@ -12,7 +12,7 @@ const grouprouter = require('./routes/group');
 const Admin = require('./models/admin');
 const http = require('http');
 const socketIo = require('socket.io');
-//require('./archiveChatCron.js');
+
 
 const app = express();
 const server = http.createServer(app);
@@ -24,6 +24,11 @@ const io = socketIo(server, {
 
 
 io.on('connection', (socket) => {
+  socket.on('userjoined',username => {
+    socket.name=username;
+    io.emit('user_joined', username);
+  })
+
   socket.on('sendMessage', ({message,room}) => {
     console.log('message in socket: ' + message);
     socket.join(room);
@@ -41,6 +46,12 @@ io.on('connection', (socket) => {
     socket.join(room);
     console.log('joineddddddddd',room)
   })
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected :- ',socket.name);
+    io.emit('user_left', socket.name);
+  });
+
 });
 
 

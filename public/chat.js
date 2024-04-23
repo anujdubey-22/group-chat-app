@@ -1,5 +1,16 @@
 // Initialize socket.io
 const socket = io.connect("http://localhost:3000");
+let username = localStorage.getItem('username');
+socket.emit('userjoined',username);
+socket.on('user_joined', (username) => {
+  // Display a message to all users that a new user has joined
+  console.log(`${username} has joined the chat.`);
+  showChatToScreen(`${username} has joined the chat.`);
+});
+socket.on('user_left',username => {
+  showChatToScreen(`${username} has leaved the chat.`)
+})
+
 socket.on("sendToAll", (msg) => {
   console.log(msg, "msg through socket");
   showChatToScreen(msg);
